@@ -3,6 +3,7 @@
 #include <ctime>
 #include <string>
 #include <limits>
+#include <fstream>
 
 using namespace std;
 
@@ -14,33 +15,30 @@ void cinInt(int* inte){
     }
 }
 
-class password{
-    private:
-    public:
-        int PassID;
-        string Passlink;
-        string PassAcc;
-        string password;
-        string genPassword(int lenght, bool incNum, bool incUpper, bool incVIP){
-            string genPass = "";
-            string lowercase = "abcdefghijklmnopqrstuvwxyz";
-            string uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            string specialsChars = "!@#$%^&*()";
-            string numbers = "1234567890";
-
-            string characters = lowercase;
-            if(incNum) characters += numbers;
-            if(incUpper) characters += uppercase;
-            if(incVIP) characters += specialsChars;
-
-            for(int i = 0; i <= lenght; i++){
-                genPass = characters[rand() % characters.length()];
-            }
-
-            return genPass;
-        }
-
+struct password{
+    int PassID;
+    string Passlink;
+    string PassAcc;
+    string password;
 };
+
+
+
+string genPassword(int length, bool incNum, bool incUpper, bool incVIP){
+    string genPass = "";
+    string lowercase = "abcdefghijklmnopqrstuvwxyz";
+    string uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    string specialsChars = "!@#$%^&*()";
+    string numbers = "1234567890";
+    string characters = lowercase;
+    if(incNum) characters += numbers;
+    if(incUpper) characters += uppercase;
+    if(incVIP) characters += specialsChars;
+    for(int i = 0; i <= length; i++){
+        genPass = characters[rand() % characters.length()];
+    }
+    return genPass;
+}
 
 vector<password> Passwords;
 
@@ -58,6 +56,44 @@ int menu(){
     cinInt(&choice);
     return choice;
 }
+
+void addPassword() {
+    ofstream printPass("passwords/password.txt");
+    if (!printPass.is_open()) {
+        cerr << "Error: Could not open the file!" << endl;
+    }
+    password newPassword;
+
+    newPassword.PassID = nextID++;
+    cout<<"Password Link: ";
+    getline(cin, newPassword.Passlink);
+
+    cout<<"Password Account: ";
+    getline(cin, newPassword.PassAcc);
+
+    cout<<"Enter Password (Enter 0 to generate password!): ";
+    getline(cin,newPassword.password);
+
+    if(newPassword.password == '0'){
+        int len, incnum, incupp, incvip;
+        cout<<"Password Length: ";
+        cinInt(&len);
+
+        cout<<"Include numbers (1 for yes and 0 for no): ";
+        cinInt(&incnum);
+
+        cout<<"Include Uppercase (1 for yes and 0 no): ";
+        cinInt(&incupp);
+
+        cout<<"Inlcude special characters (1 for yes and 0 for no): ";
+        cinInt(&incvip);
+
+    }
+
+
+}
+
+
 
 int main() {
     
