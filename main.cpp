@@ -4,6 +4,7 @@
 #include <string>
 #include <limits>
 #include <fstream>
+#include <iomanip>
 
 using namespace std;
 
@@ -74,7 +75,7 @@ void addPassword() {
     cout<<"Enter Password (Enter 0 to generate password!): ";
     getline(cin,newPassword.password);
 
-    if(newPassword.password == '0'){
+    if(newPassword.password == "0"){
         int len, incnum, incupp, incvip;
         cout<<"Password Length: ";
         cinInt(&len);
@@ -88,7 +89,33 @@ void addPassword() {
         cout<<"Inlcude special characters (1 for yes and 0 for no): ";
         cinInt(&incvip);
 
+        cin.ignore();
+
+        newPassword.password = genPassword(len, incnum, incupp, incvip);
+        cout<<"Generated Password: ";
+        cout<<newPassword.password;
+
     }
+
+    printPass<<left<<setw(5)<<"ID"
+                   <<setw(20)<<"Password Link"
+                   <<setw(20)<<"Password Account"
+                   <<setw(20)<<"Password"
+                   <<endl;
+    printPass<<setfill('-')<<setw(5)<<""
+                           <<setw(20)<<""
+                           <<setw(20)<<""
+                           <<setw(20)<<""
+                           <<endl;
+    printPass<<setfill(' ');
+    printPass<<left<<setw(5)<<newPassword.PassID
+                   <<setw(20)<<newPassword.Passlink
+                   <<setw(20)<<newPassword.PassAcc
+                   <<setw(20)<<newPassword.password
+                   <<endl;
+
+    cout<<"Password Saved!";
+    return;
 
 
 }
@@ -96,7 +123,7 @@ void addPassword() {
 
 
 int main() {
-    
+    addPassword();
     // Your code here
     return 0;
 }
