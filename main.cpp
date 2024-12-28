@@ -17,7 +17,6 @@ void cinInt(int* inte){
 }
 
 struct password{
-    int PassID;
     string Passlink;
     string PassAcc;
     string password;
@@ -26,31 +25,39 @@ struct password{
 
 
 string genPassword(int length, bool incNum, bool incUpper, bool incVIP){
+	
     string genPass = "";
+    
     string lowercase = "abcdefghijklmnopqrstuvwxyz";
     string uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    
     string specialsChars = "!@#$%^&*()";
     string numbers = "1234567890";
+    
     string characters = lowercase;
     if(incNum) characters += numbers;
+    
     if(incUpper) characters += uppercase;
     if(incVIP) characters += specialsChars;
-    for(int i = 0; i <= length; i++){
-        genPass = characters[rand() % characters.length()];
+    
+    for(int i = 0; i < length; i++){
+        genPass += characters[rand() % characters.length()];
     }
+    
     return genPass;
 }
 
-vector<password> Passwords;
+ofstream printPass("passwords/password.txt", ios::app);
 
-int nextID = 1;
+ifstream getPass("passwords/password.txt");
+
+vector<string> passwords;
 
 int menu(){
     int choice;
     cout<<"Password Manager!";
     cout<<"\n\t 1. Add Password Record";
     cout<<"\n\t 2. View Password Record";
-    cout<<"\n\t 3. Edit Password Record";
     cout<<"\n\t 4. Delete Password Record";
     cout<<"\n\t 5. Exit";
     cout<<"\n\t Enter your choice: ";
@@ -58,14 +65,13 @@ int menu(){
     return choice;
 }
 
+
 void addPassword() {
-    ofstream printPass("passwords/password.txt");
     if (!printPass.is_open()) {
         cerr << "Error: Could not open the file!" << endl;
     }
     password newPassword;
-
-    newPassword.PassID = nextID++;
+    
     cout<<"Password Link: ";
     getline(cin, newPassword.Passlink);
 
@@ -97,32 +103,60 @@ void addPassword() {
 
     }
 
-    printPass<<left<<setw(5)<<"ID"
-                   <<setw(20)<<"Password Link"
-                   <<setw(20)<<"Password Account"
-                   <<setw(20)<<"Password"
-                   <<endl;
-    printPass<<setfill('-')<<setw(5)<<""
-                           <<setw(20)<<""
-                           <<setw(20)<<""
-                           <<setw(20)<<""
-                           <<endl;
+     printPass << left<< setw(60) << newPassword.Passlink
+              << setw(60) << newPassword.PassAcc
+              << setw(60) << newPassword.password
+              << endl;
+    printPass << setfill('-')<<setw(60)<<""
+    						 <<setw(60)<<""
+    						 <<setw(60)<<""
+    						 <<endl;
     printPass<<setfill(' ');
-    printPass<<left<<setw(5)<<newPassword.PassID
-                   <<setw(20)<<newPassword.Passlink
-                   <<setw(20)<<newPassword.PassAcc
-                   <<setw(20)<<newPassword.password
-                   <<endl;
 
-    cout<<"Password Saved!";
+    cout << "\nPassword Saved!" << endl;
     return;
 
 
 }
 
+void getPasswords(){
+	
+	password line;
+	
+	if(!getPass.is_open()){
+		cerr<<"Error: Couldn't open the file!";
+		return;
+
+	}	
+	for(int i = 1; getPass >> line.Passlink; i++ ){
+		
+	}
+	
+}
+
+void viewPass(){
+	if(passwords.size() == 0){
+		cout<<"No Password Saved!";
+		return;
+	}
+	for(int i = 0; i < passwords.size(); i++){
+		cout<<passwords.at(i)<<endl;
+	}
+}
+
+void deletePass() {
+    if (!inputFile.is_open()) {
+        cerr << "Error: Could not open the file for reading!" << endl;
+        return;
+    }
+
+    
+}
 
 
 int main() {
+	getPasswords();
+    viewPass();
     addPassword();
     // Your code here
     return 0;
