@@ -17,6 +17,7 @@ void cinInt(int* inte){
 }
 
 struct password{
+    int passID;
     string Passlink;
     string PassAcc;
     string password;
@@ -51,7 +52,9 @@ ofstream printPass("passwords/password.txt", ios::app);
 
 ifstream getPass("passwords/password.txt");
 
-vector<string> passwords;
+vector<password> passwords;
+
+int nextID = 1;
 
 int menu(){
     int choice;
@@ -71,6 +74,7 @@ void addPassword() {
         cerr << "Error: Could not open the file!" << endl;
     }
     password newPassword;
+    newPassword.passID = nextID++;
     
     cout<<"Password Link: ";
     getline(cin, newPassword.Passlink);
@@ -103,11 +107,13 @@ void addPassword() {
 
     }
 
-     printPass << left<< setw(60) << newPassword.Passlink
+     printPass << left<< setw(5) << newPassword.passID
+              << setw(60) << newPassword.Passlink
               << setw(60) << newPassword.PassAcc
               << setw(60) << newPassword.password
               << endl;
-    printPass << setfill('-')<<setw(60)<<""
+    printPass << setfill('-')<<setw(5)<<""
+                             <<setw(60)<<""
     						 <<setw(60)<<""
     						 <<setw(60)<<""
     						 <<endl;
@@ -128,27 +134,37 @@ void getPasswords(){
 		return;
 
 	}	
-	for(int i = 1; getPass >> line.Passlink; i++ ){
-		
+	for(int i = 1; getPass >> line.passID; i++ ){
+		getPass >> line.Passlink;
+        getPass >> line.PassAcc;
+        getPass >> line.password;
+
+        passwords.push_back(line);
 	}
-	
+	for(int i = 1; i < passwords.size(); i+=2){
+        cout<<passwords.at(i).passID<<"\t"<<passwords.at(i).Passlink << "\t" << passwords.at(i).PassAcc << "\t"<<passwords.at(i).password<<endl;
+    }
 }
 
 void viewPass(){
-	if(passwords.size() == 0){
-		cout<<"No Password Saved!";
-		return;
-	}
-	for(int i = 0; i < passwords.size(); i++){
-		cout<<passwords.at(i)<<endl;
-	}
+	
 }
 
 void deletePass() {
-    if (!inputFile.is_open()) {
+    if (!getPass.is_open()) {
         cerr << "Error: Could not open the file for reading!" << endl;
         return;
     }
+
+    password inPassword;
+
+    for(int i = 0; getPass >> inPassword.passID; i++){
+        getPass >> inPassword.Passlink;
+        getPass>> inPassword.PassAcc;
+        getPass >> inPassword.password;
+    }
+
+
 
     
 }
